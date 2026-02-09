@@ -1,0 +1,14 @@
+{
+  "name": "context-bootstrapper",
+  "version": "1.0.0",
+  "description": "Rapid context recovery for AI agent sessions - generates concise summary of recent activity, pending work, and current state",
+  "author": "bobrenze-bot",
+  "license": "MIT",
+  "repository": "https://github.com/bobrenze-bot/skill-context-bootstrapper",
+  "keywords": ["context", "bootstrap", "session", "recovery", "agent"],
+  "entry": "bootstrap.sh",
+  "install": {
+    "type": "git",
+    "url": "https://github.com/bobrenze-bot/skill-context-bootstrapper.git"
+  }
+}
