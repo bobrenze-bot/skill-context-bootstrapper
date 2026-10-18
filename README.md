@@ -28,6 +28,17 @@ context-bootstrapper --json
 - **Completeness**: Won't miss important pending work
 - **Velocity**: Start working faster, less ramp-up
 
+## Tests
+
+Run the regression suite with Bash, Git, and Python 3:
+
+```bash
+python3 -m unittest discover -s tests -v
+bash -n bootstrap.sh
+```
+
+The tests create temporary synthetic workspaces and do not read your real workspace.
+
 ## License
 
 MIT
