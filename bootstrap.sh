@@ -108,15 +108,23 @@ get_recent_commits() {
     echo "$count|$rate|$last_msg"
 }
 
+# grep -c already prints 0 for no matches, even though it exits with status 1.
+# Do not append another zero: callers require a single numeric field.
+count_queue_status() {
+    local count
+    count=$(grep -c "status: $1" "$QUEUE_FILE" 2>/dev/null || true)
+    printf '%s\n' "${count:-0}"
+}
+
 get_queue_status() {
     if [[ ! -f "$QUEUE_FILE" ]]; then
         echo "0|0|0|No queue"
         return
     fi
     
-    local pending=$(grep -c "status: pending" "$QUEUE_FILE" 2>/dev/null || echo "0")
-    local blocked=$(grep -c "status: blocked" "$QUEUE_FILE" 2>/dev/null || echo "0")
-    local completed=$(grep -c "status: completed" "$QUEUE_FILE" 2>/dev/null || echo "0")
+    local pending=$(count_queue_status pending)
+    local blocked=$(count_queue_status blocked)
+    local completed=$(count_queue_status completed)
     
     # Get next pending task
     local next_task=""
@@ -205,8 +213,8 @@ get_stats() {
     cd "$WORKSPACE"
     
     # Calculate velocity from queue
-    local total_tasks=$(grep -c "status: completed" "$QUEUE_FILE" 2>/dev/null || echo "0")
-    local pending=$(grep -c "status: pending" "$QUEUE_FILE" 2>/dev/null || echo "0")
+    local total_tasks=$(count_queue_status completed)
+    local pending=$(count_queue_status pending)
     
     # Commits per day (last 7 days)
     local week_commits=$(git log --since="7 days ago" --oneline 2>/dev/null | wc -l | tr -d ' ')
